@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "bandits"
+version = "0.1.0"
+description = ""
+authors = ["Christopher Hassan <christopher.hassan@marks-and-spencer.com>"]
+readme = "README.md"
+packages = [{ include = "bandits" }]
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.dependencies]
+python = "^3.11"
+altair = "^5.3.0"
+pandas = "^2.2.2"
+numpy = "<2.0.0"
+scipy = "^1.14.0"
+gymnasium = "^0.29.0"
+bokeh = "^3.5.1"
+vegafusion-python-embed = "^1.6.9"
+vegafusion = "^1.6.9"
+vl-convert-python = "^1.7.0"
+imageio = "^2.35.1"
+scikit-image = "^0.24.0"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.5"
+pre-commit = "^4.0.1"
