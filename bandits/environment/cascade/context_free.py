@@ -30,7 +30,10 @@ class CascadeContextFreeBandit(gym.Env):
         self.len_list = len_list
         self.max_steps = max_steps
         self.observation_space = None
-        self.action_space = None  # spaces.Discrete(self.n_actions) is not valid!
+        # spaces.Discrete(self.n_actions) is not valid!
+        # we want something like the below!
+        # np.random.choice(range(self.n_actions), replace=False, size=len_list)
+        self.action_space = None
 
         self.optimal_action = get_optimal_ordering(weights, self.len_list)
         self.optimal_reward = get_prob_of_a_click(
@@ -48,6 +51,9 @@ class CascadeContextFreeBandit(gym.Env):
         return dict(
             position_of_click=reward["position_of_click"],
             prob_of_click=reward["prob_of_click"],
+            optimal_action=self.optimal_action,
+            optimal_reward=self.optimal_reward,
+            optimal_weights=self.optimal_weights,
         )
 
     def _get_click(self, action: list[int]) -> tuple[int, Union[int, None]]:
