@@ -4,6 +4,7 @@ import gymnasium as gym
 import numpy as np
 
 from bandits.environment.cascade.shared_utils import (
+    ActionRecommendation,
     get_optimal_ordering,
     get_prob_of_a_click,
 )
@@ -25,7 +26,9 @@ class CascadeContextFreeBandit(gym.Env):
         # do not know how to create the following action space: np.random.choice(
         #   range(self.n_actions), replace=False, size=self.len_list
         # )
-        self.action_space = None
+        self.action_space = ActionRecommendation(
+            n_actions=self.n_actions, len_list=self.len_list
+        )
 
         self.optimal_action = get_optimal_ordering(weights, self.len_list)
         self.optimal_reward = get_prob_of_a_click(
