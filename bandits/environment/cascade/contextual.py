@@ -3,6 +3,7 @@ from typing import Any, TypedDict, Union
 import gymnasium as gym
 import numpy as np
 from gymnasium import spaces
+from sklearn.utils import check_random_state
 
 from bandits.environment.cascade.shared_utils import (
     ActionRecommendation,
@@ -67,7 +68,7 @@ class CascadeContextualBandit(gym.Env):
         position_of_click = None
 
         for a in action:
-            if np.random.rand() < self.weights[self.context][a]:
+            if self.random_.rand() < self.weights[self.context][a]:
                 reward = 1
                 position_of_click = a
 
@@ -88,7 +89,8 @@ class CascadeContextualBandit(gym.Env):
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
-        np.random.seed(seed)
+        self.action_space.seed(seed)
+        self.random_ = check_random_state(seed)
         self._n_steps = 0
         observation = self._get_obs()
         info = self._get_info(reward=None)

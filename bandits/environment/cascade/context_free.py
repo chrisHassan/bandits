@@ -2,6 +2,7 @@ from typing import Any, TypedDict, Union
 
 import gymnasium as gym
 import numpy as np
+from sklearn.utils import check_random_state
 
 from bandits.environment.cascade.shared_utils import (
     ActionRecommendation,
@@ -23,9 +24,6 @@ class CascadeContextFreeBandit(gym.Env):
         self.len_list = len_list
         self.max_steps = max_steps
         self.observation_space = None
-        # do not know how to create the following action space: np.random.choice(
-        #   range(self.n_actions), replace=False, size=self.len_list
-        # )
         self.action_space = ActionRecommendation(
             n_actions=self.n_actions, len_list=self.len_list
         )
@@ -56,7 +54,7 @@ class CascadeContextFreeBandit(gym.Env):
         position_of_click = None
 
         for a in action:
-            if np.random.rand() < self.weights[a]:
+            if self.random_.rand() < self.weights[a]:
                 reward = 1
                 position_of_click = a
 
@@ -75,7 +73,8 @@ class CascadeContextFreeBandit(gym.Env):
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
-        np.random.seed(seed)
+        self.random_ = check_random_state(seed)
+        self.action_space.seed(seed)
         self._n_steps = 0
         observation = self._get_obs()
         info = self._get_info(reward=None)
